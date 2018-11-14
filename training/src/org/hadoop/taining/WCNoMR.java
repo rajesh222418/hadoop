@@ -1,3 +1,5 @@
+package org.hadoop.taining;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -16,7 +18,7 @@ public class WCNoMR {
 		String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
 		Path input = new Path(files[0]);
 		Path output = new Path(files[1]);
-		Job j = new Job(c, "wordcount");
+		Job j = Job.getInstance(c, "wordcount");
 		j.setJarByClass(WCNoMR.class);
 		j.setMapperClass(TokenCounterMapper.class);
 		j.setReducerClass(IntSumReducer.class);
