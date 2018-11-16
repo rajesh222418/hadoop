@@ -3,7 +3,9 @@ package org.hadoop.secondarysort;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
@@ -25,25 +27,26 @@ public class Driver {
 
 		// Create job
 		Job job = new Job(conf, "SecondarySort");
-		job.setJarByClass(Lab2Mapper.class);
-		job.setGroupingComparatorClass(GroupingComparator.class);
-		job.setPartitionerClass(NaturalKeyPartitioner.class);
-		job.setSortComparatorClass(SecondarySortCompKeySortComparator.class);
+		job.setJarByClass(Driver.class);
+		//job.setGroupingComparatorClass(GroupingComparator.class);
+		//job.setPartitionerClass(NaturalKeyPartitioner.class);
+		//job.setSortComparatorClass(SecondarySortCompKeySortComparator.class);
 
 		// Setup MapReduce
-		job.setMapperClass(Lab2Mapper.class);
-		job.setReducerClass(Lab2Reducer.class);
-		job.setNumReduceTasks(2);
+		job.setMapperClass(SecondaryMapper.class);
+		job.setReducerClass(SecondaryReducer.class);
+		job.setNumReduceTasks(1);
 
 		// Specify key / value
 		job.setMapOutputKeyClass(CompositeKeyWritable.class);
 		job.setOutputValueClass(NullWritable.class);
 		job.setOutputKeyClass(CompositeKeyWritable.class);
 		job.setOutputValueClass(NullWritable.class);
+		
 
 		// Input
 		FileInputFormat.addInputPath(job, inputPath);
-		job.setInputFormatClass(TextInputFormat.class);
+		//job.setInputFormatClass(FileInputFormat.class);
 
 		// Output
 		FileOutputFormat.setOutputPath(job, outputDir);

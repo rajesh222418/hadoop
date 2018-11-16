@@ -4,79 +4,96 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableUtils;
 
-public class CompositeKeyWritable implements Writable,WritableComparable<CompositeKeyWritable> {
+public class CompositeKeyWritable implements WritableComparable<CompositeKeyWritable> {
 
 	
-	private String zipcode;
-	private String bikeId;
+	private Text lname,fname;
+	private IntWritable age;
 	
-	
-	
-	public CompositeKeyWritable(){
-		
+	public CompositeKeyWritable() {
+		lname = new Text();
+		fname = new Text();
+		age = new IntWritable();
 	}
 	
 	
-	public CompositeKeyWritable(String d,String l){
-		this.zipcode=d;
-		this.bikeId=l;
-		
-		
-	}
 	
+	public Text getLname() {
+		return lname;
+	}
+	public void setLname(Text lname) {
+		this.lname = lname;
+	}
+	public Text getFname() {
+		return fname;
+	}
+	public void setFname(Text fname) {
+		this.fname = fname;
+	}
+
+
+
+	public IntWritable getAge() {
+		return age;
+	}
+
+
+
+	public void setAge(IntWritable age) {
+		this.age = age;
+	}
+
+
+
+	@Override
 	public int compareTo(CompositeKeyWritable o) {
-		int result =zipcode.compareTo(o.zipcode);
-		if (result==0){
-			result=bikeId.compareTo(o.bikeId);
+		int value = age.compareTo(o.getAge());
+		if( value == 0){
+              value = fname.compareTo(o.getFname());
+			
+			if(value == 0){
+				value = -1 * (lname.compareTo(o.lname)); 
 		}
 		
-		return result;
-		
+		}
+		 
+		return value;
 	}
 
-	public void write(DataOutput d) throws IOException {
-		WritableUtils.writeString(d, zipcode);
-		WritableUtils.writeString(d, bikeId);
-		
-	}
-
-	public void readFields(DataInput di) throws IOException {
-		zipcode=WritableUtils.readString(di);
-	bikeId=	WritableUtils.readString(di);
-		
-	}
-
-
-	
-	public String getZipcode() {
-		return zipcode;
-	}
-
-
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
-	}
-
-
-	public String getBikeId() {
-		return bikeId;
-	}
-
-
-	public void setBikeId(String bikeId) {
-		this.bikeId = bikeId;
-	}
-
-
+	@Override
 	public String toString(){
-		return (new StringBuilder().append(zipcode).append("\t").append(bikeId).toString());
+		return (new StringBuilder().append(age).append(" ").append(fname).append(" ").append(lname).toString());
 	}
-	
-	
-	
+
+
+
+	@Override
+	public void readFields(DataInput in) throws IOException {
+		// TODO Auto-generated method stub
+		this.fname = new Text(in.readUTF());
+		this.lname = new Text(in.readUTF());
+		this.age = new IntWritable(in.readInt());
+		
+	}
+
+
+
+	@Override
+	public void write(DataOutput out) throws IOException {
+		// TODO Auto-generated method stub
+		out.writeUTF(fname.toString());
+		out.writeUTF(lname.toString());
+		out.writeInt(age.get());
+		
+	}
+
+
+
 
 }

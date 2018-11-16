@@ -14,13 +14,12 @@ public class SecondarySortCompKeySortComparator extends WritableComparator {
 		CompositeKeyWritable key1 = (CompositeKeyWritable) w1;
 		CompositeKeyWritable key2 = (CompositeKeyWritable) w2;
 
-		int cmpResult = key1.getZipcode().compareTo(key2.getZipcode());
+		int cmpResult = key1.getFname().compareTo(key2.getFname());
 		if (cmpResult == 0)// same zip
 		{
-			return -key1.getBikeId()
-					.compareTo(key2.getBikeId());
-			//If the minus is taken out, the values will be in
-			//ascending order
+			
+				cmpResult = -key1.getLname().compareTo(key2.getLname());
+			
 		}
 		return cmpResult;
 	}

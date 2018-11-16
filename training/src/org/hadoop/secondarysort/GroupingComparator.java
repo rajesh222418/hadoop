@@ -15,7 +15,7 @@ public class GroupingComparator extends WritableComparator{
 		
 		CompositeKeyWritable cw1= (CompositeKeyWritable)w1;
 		CompositeKeyWritable cw2= (CompositeKeyWritable)w2;
-		return cw1.getZipcode().compareTo(cw2.getZipcode());		
+		return cw1.getFname().compareTo(cw2.getFname());		
 	}
 
 }
